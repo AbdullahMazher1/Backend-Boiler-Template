@@ -19,9 +19,7 @@ const login = async (req, res) => {
                 'message': 'User Logged In Successfully',
                 'userId': User._id,
                 'token': token,
-                'data': {
-                    User,
-                },
+                'data': User,
             });
             return;
         }
@@ -54,9 +52,9 @@ const signup = async (req, res) => {
             res.json({
                 'success': true,
                 'message': 'User Registered Successfully',
+                'token': token,
                 'data': {
                     'userId': User._id,
-                    'token': token,
                     'name:': User.name,
                     'email': User.email,
                     'timestamp': User.createdAt
@@ -64,7 +62,10 @@ const signup = async (req, res) => {
             });
         }
     } catch (error) {
-        if (error.code === 11000) res.status(400).json({ 'success': false, 'message': 'User Already Exists' });
+        if (error.code === 11000) {
+            res.status(400).json({ 'success': false, 'message': 'User Already Exists' });
+            return;
+        }
         res.status(500).json({
             success: false,
             message: "Server error"
