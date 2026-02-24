@@ -5,9 +5,9 @@ const generateToken = require('../utils/validator/generateToken')
 const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        res.json({
-            'success': false,
-            'message': 'Please provide email and password'
+        return res.status(400).json({
+            success: false,
+            message: 'Email and password required'
         });
     }
     try {
@@ -25,22 +25,24 @@ const login = async (req, res) => {
             });
             return;
         }
-        res.json({
-            'success': false,
-            'message': 'User Not Found'
-        })
+        return res.status(401).json({
+            success: false,
+            message: "Invalid credentials"
+        });
     } catch (error) {
-        console.log('ERROR in LOGIN API: ', error);
-        res.json({ 'success': false, 'error': error });
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
     }
 }
 
 const signup = async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-        res.json({
-            'success': false,
-            'message': 'Please provide name, email and password'
+        return res.status(400).json({
+            success: false,
+            message: 'Name, Email and password required'
         });
         return;
     }
@@ -52,17 +54,21 @@ const signup = async (req, res) => {
             res.json({
                 'success': true,
                 'message': 'User Registered Successfully',
-                'userId': User._id,
-                'token': token,
                 'data': {
-                    User,
+                    'userId': User._id,
+                    'token': token,
+                    'name:': User.name,
+                    'email': User.email,
+                    'timestamp': User.createdAt
                 },
             });
         }
     } catch (error) {
-        console.log('ERROR in SIGN UP API: ', error)
-        if (error.code === 11000) res.json({ 'success': false, 'message': 'User Already Exists' });
-        res.json({ 'success': false, 'error': error });
+        if (error.code === 11000) res.status(400).json({ 'success': false, 'message': 'User Already Exists' });
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
     }
 }
 

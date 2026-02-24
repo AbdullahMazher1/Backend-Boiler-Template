@@ -3,13 +3,12 @@ const express = require('express');
 const cors = require("cors");
 const authRoutes = require('./src/routes/AuthRoutes')
 const connectDB = require('./src/config/db')
-const router = require('express').Router();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 connectDB();
 
 app.get('/', (req, res) => {

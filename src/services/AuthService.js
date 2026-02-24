@@ -3,7 +3,7 @@ const isMatch = require('../utils/validator/IsMatch');
 
 const loginService = async (email, password) => {
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select('+password');
         if (user) {
             const status = await isMatch(password, user.password);
             if (status) {
@@ -18,7 +18,7 @@ const loginService = async (email, password) => {
 
 const signupService = async (name, email, password) => {
     try {
-        const user = User.create({ name, email, password });
+        const user = await User.create({ name, email, password });
         if (user) {
             return user;
         }
