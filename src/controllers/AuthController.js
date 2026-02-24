@@ -1,5 +1,5 @@
 const { loginService, signupService } = require('../services');
-const hashPassword = require('../utils/validator/DecryptPassword')
+const hashPassword = require('../utils/validator/hashPassword')
 const generateToken = require('../utils/validator/generateToken')
 
 const login = async (req, res) => {
